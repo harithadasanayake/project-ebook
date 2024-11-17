@@ -1,0 +1,448 @@
+﻿@model eBookSystem.Models.Book
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .book-details-layout {
+            display: flex;
+            gap: 40px;
+        }
+
+        .book-main {
+            flex: 3;
+        }
+
+        .similar-books {
+            flex: 1;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 200px;
+        }
+
+        .book-details-grid {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            padding: 40px 0;
+        }
+
+        .book-image {
+            flex: 1;
+        }
+
+            .book-image img {
+                width: 100%;
+                border-radius: 8px;
+            }
+
+        .book-info {
+            flex: 2;
+        }
+
+        .book-title {
+            font-size: 3rem;
+            font-family: var(--ff-jost);
+            margin-bottom: 15px;
+            color: var(--maximum-blue-green);
+        }
+
+        .book-author {
+            font-family: "Sorts Mill Goudy", serif;
+            font-size: 1.5rem;
+            font-family: var(--ff-work-sans);
+            margin-bottom: 10px;
+            color: #fc979d;
+        }
+
+        .rating-wrapper {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+            .rating-wrapper ion-icon {
+                font-size: 1.5rem;
+                color: #ffc107;
+            }
+
+        .book-price {
+            font-size: 1.5rem;
+            font-family: var(--ff-work-sans);
+            margin-bottom: 10px;
+            color: var(--maximum-blue-green);
+        }
+
+        .book-description {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--granite-gray);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+            .quantity-selector button {
+                padding: 10px;
+                font-size: 1rem;
+                border: none;
+                background-color: var(--maximum-blue-green);
+                color: var(--white-1);
+                cursor: pointer;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+
+                .quantity-selector button:hover {
+                    background-color: var(--selective-yellow);
+                }
+
+            .quantity-selector span {
+                font-size: 1.2rem;
+                font-family: var(--ff-work-sans);
+                padding: 0 10px;
+            }
+
+        .btn-wrapper {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition-1);
+            font-family: var(--ff-jost);
+        }
+
+        .btn-primary {
+            background-color: var(--maximum-blue-green);
+            color: var(--white-1);
+        }
+
+            .btn-primary:hover {
+                background-color: var(--selective-yellow);
+            }
+
+        .btn-secondary {
+            background-color: var(--eerie-black);
+            color: var(--white-1);
+        }
+
+            .btn-secondary:hover {
+                background-color: var(--spanish-gray);
+            }
+
+        .similar-books h2 {
+            font-size: 2rem;
+            font-family: var(--ff-jost);
+            color: var(--maximum-blue-green);
+            margin-bottom: 20px;
+        }
+
+        .similar-books-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .similar-book {
+            position: relative;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+            .similar-book img {
+                width: 100px;
+                height: 150px;
+                border-radius: 8px;
+                object-fit: cover;
+            }
+
+            .similar-book:hover .card-action {
+                display: flex;
+            }
+
+        .card-action {
+            display: none;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            gap: 5px;
+        }
+
+        .reviews {
+            margin-top: 40px;
+        }
+
+            .reviews h2 {
+                font-size: 2rem;
+                font-family: var(--ff-jost);
+                color: var (--maximum-blue-green);
+                margin-bottom: 20px;
+            }
+
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .review {
+            background-color: var(--white-2);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .reviewer {
+            font-size: 1.2rem;
+            font-family: var (--ff-jost);
+            color: var (--granite-gray);
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            font-size: 1rem;
+            font-family: var (--ff-work-sans);
+            color: var (--granite-gray);
+        }
+
+        .out-of-stock {
+            font-size: 1.2rem;
+            color: red;
+            font-weight: bold;
+        }
+
+        .btn-disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="section book-details" aria-label="Book Details">
+            <div class="container">
+                <div class="book-details-layout">
+                    <div class="book-main">
+                        <div class="book-details-grid">
+                            <div class="book-image">
+                                <img src="data:image/png;base64,@Convert.ToBase64String(Model.CoverImage)" alt="@Model.Title" class="img-cover">
+                                @if (Model.Quantity == 0)
+                                {
+                                    <div class="out-of-stock">Out of Stock</div>
+                                }
+                            </div>
+                            <div class="book-info">
+                                <h1 class="book-title">@Model.Title</h1>
+                                <p class="book-author">by @Model.Author</p>
+                                <div class="rating-wrapper">
+                                    @for (double i = 1; i <= 5; i += 1)
+                                    {
+                                        var avgRating = Model.AverageRating ?? 0;
+
+                                        if (i <= avgRating)
+                                        {
+                                            <ion-icon name="star" aria-hidden="true"></ion-icon>
+                                        }
+                                        else
+                                        {
+                                            <ion-icon name="star-outline" aria-hidden="true"></ion-icon>
+                                        }
+                                    }
+                                </div>
+                                <p class="book-price">@Model.Condition</p>
+                                <p class="book-price">Rs. @Model.Price</p>
+                                <p class="book-description">@Model.Description</p>
+                                @if (Model.Quantity > 0)
+                                {
+                                    <div class="quantity-selector">
+                                        <button type="button" id="decrease-quantity" class="quantity-btn">-</button>
+                                        <span id="quantity">1</span>
+                                        <button type="button" id="increase-quantity" class="quantity-btn">+</button>
+                                    </div>
+                                }
+                                <input type="hidden" id="isUserLoggedIn" value="@User.Identity.Name;" />
+                                <div class="btn-wrapper">
+                                    <form id="buyNowForm" asp-controller="DirectOrder" asp-action="Checkout" method="get">
+                                        <input type="hidden" name="bookId" value="@Model.Id" />
+                                        <input type="hidden" name="quantity" id="quantity-input-buy-now" value="1" />
+                                        <button type="button" id="buyNowButton" class="btn btn-secondary @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Buy Now</button>
+                                    </form>
+                                    <form id="addToCartForm" asp-controller="Cart" asp-action="AddToCart" method="post">
+                                        <input type="hidden" name="bookId" value="@Model.Id" />
+                                        <input type="hidden" name="quantity" id="quantity-input" value="1" />
+                                        <button type="button" id="addToCartButton" class="btn btn-primary @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews">
+                            <h2>Reviews</h2>
+                            <div class="review-list">
+                                <div class="review">
+                                    <p class="reviewer">Reviewer 1</p>
+                                    <p class="review-text">Great book!</p>
+                                </div>
+                                <div class="review">
+                                    <p class="reviewer">Reviewer 2</p>
+                                    <p class="review-text">Very interesting read.</p>
+                                </div>
+                                <div class="review">
+                                    <p class="reviewer">Reviewer 3</p>
+                                    <p class="review-text">I loved it.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="similar-books">
+                        <h2>Similar Books</h2>
+                        <div class="similar-books-grid">
+                            <div class="similar-book">
+                                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fmediamodifier.com%2Fdesign-template%2Ffiction-novel-book-cover-template%2F2751&psig=AOvVaw1GzRMbaYwDNoRFrZ7jGTDw&ust=1717906858540000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKDn5fGTy4YDFQAAAAAdAAAAABAX" alt="Similar Book 1" class="img-similar">
+                                <div class="card-action">
+                                    <a href="#" class="action-btn" aria-label="quick view" title="Quick View">
+                                        <ion-icon name="eye-outline" aria-hidden="true"></ion-icon>
+                                    </a>
+                                    <button class="action-btn" aria-label="add to wishlist" title="Add to Wishlist">
+                                        <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                    <button class="action-btn" aria-label="compare" title="Compare">
+                                        <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                    <button class="action-btn" aria-label="add to cart" title="Add to Cart">
+                                        <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="similar-book">
+                                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.canva.com%2Fbook-covers%2Ftemplates%2Fphoto%2F&psig=AOvVaw15nC0N5YA7sEO1z2NbKWNg&ust=1717906833208000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOjSiOaTy4YDFQAAAAAdAAAAABAE" alt="Similar Book 2" class="img-similar">
+                                <div class="card-action">
+                                    <a href="#" class="action-btn" aria-label="quick view" title="Quick View">
+                                        <ion-icon name="eye-outline" aria-hidden="true"></ion-icon>
+                                    </a>
+                                    <button class="action-btn" aria-label="add to wishlist" title="Add to Wishlist">
+                                        <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                    <button class="action-btn" aria-label="compare" title="Compare">
+                                        <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                    <button class="action-btn" aria-label="add to cart" title="Add to Cart">
+                                        <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="similar-book">
+                                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F404620347762750545%2F&psig=AOvVaw1GzRMbaYwDNoRFrZ7jGTDw&ust=1717906858540000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKDn5fGTy4YDFQAAAAAdAAAAABAS" alt="Similar Book 3" class="img-similar">
+                                <div class="card-action">
+                                    <a href="#" class="action-btn" aria-label="quick view" title="Quick View">
+                                        <ion-icon name="eye-outline" aria-hidden="true"></ion-icon>
+                                    </a>
+                                    <button class="action-btn" aria-label="add to wishlist" title="Add to Wishlist">
+                                        <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                    <button class="action-btn" aria-label="compare" title="Compare">
+                                        <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                    <button class="action-btn" aria-label="add to cart" title="Add to Cart">
+                                        <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const quantityElement = document.getElementById('quantity');
+            const quantityInput = document.getElementById('quantity-input');
+            const increaseButton = document.getElementById('increase-quantity');
+            const decreaseButton = document.getElementById('decrease-quantity');
+            const isUserLoggedIn = document.getElementById('isUserLoggedIn').value;
+
+            increaseButton.addEventListener('click', function () {
+                let quantity = parseInt(quantityElement.innerText);
+                if (quantity < @Model.Quantity) {
+                    quantity++;
+                    quantityElement.innerText = quantity;
+                    quantityInput.value = quantity;
+                }
+            });
+
+            decreaseButton.addEventListener('click', function () {
+                let quantity = parseInt(quantityElement.innerText);
+                if (quantity > 1) {
+                    quantity--;
+                    quantityElement.innerText = quantity;
+                    quantityInput.value = quantity;
+                }
+            });
+
+            document.getElementById('buyNowButton').addEventListener('click', function (e) {
+                if (isUserLoggedIn === ";") {
+                    e.preventDefault();
+                    alert('You need to be logged in to buy this item.');
+                } else if (@Model.Quantity == 0) {
+                    e.preventDefault();
+                    alert('This item is out of stock.');
+                } else {
+                    document.getElementById('buyNowForm').submit();
+                }
+            });
+
+            document.getElementById('addToCartButton').addEventListener('click', function (e) {
+                if (isUserLoggedIn === ";") {
+                    e.preventDefault();
+                    alert('You need to be logged in to add this item to your cart.');
+                } else if (@Model.Quantity == 0) {
+                    e.preventDefault();
+                    alert('This item is out of stock.');
+                } else {
+                    document.getElementById('addToCartForm').submit();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

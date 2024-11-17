@@ -1,0 +1,363 @@
+﻿@model IEnumerable<eBookSystem.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+}
+<br />
+<br />
+<br />
+<br />
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="filter-container">
+        <label for="orderStatusFilter">Filter by Status:</label>
+        <select id="orderStatusFilter" class="form-control" onchange="filterOrders()">
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Processing">Processing</option>
+            <option value="Packaged">Packaged</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+    </div>
+
+    <div id="ordersContainer">
+        @foreach (var order in Model)
+        {
+            <div class="order glassmorphism">
+                <h3>Order #@order.Id</h3>
+                <p>Date: @order.OrderDate.ToString("g")</p>
+                <p>Status: @order.Status</p>
+                <p>Total Amount: Rs. @order.TotalAmount</p>
+
+                <div class="progress-bar-container">
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 1)">
+                        <div class="circle">1</div>
+                        <div class="label">Pending</div>
+                    </div>
+                    <div class="progress-line @GetProgressStageClass(order.Status, 2)"></div>
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 2)">
+                        <div class="circle">2</div>
+                        <div class="label">Confirmed</div>
+                    </div>
+                    <div class="progress-line @GetProgressStageClass(order.Status, 3)"></div>
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 3)">
+                        <div class="circle">3</div>
+                        <div class="label">Processing</div>
+                    </div>
+                    <div class="progress-line @GetProgressStageClass(order.Status, 4)"></div>
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 4)">
+                        <div class="circle">4</div>
+                        <div class="label">Packaged</div>
+                    </div>
+                    <div class="progress-line @GetProgressStageClass(order.Status, 5)"></div>
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 5)">
+                        <div class="circle">5</div>
+                        <div class="label">Shipped</div>
+                    </div>
+                    <div class="progress-line @GetProgressStageClass(order.Status, 6)"></div>
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 6)">
+                        <div class="circle">6</div>
+                        <div class="label">Delivered</div>
+                    </div>
+                    <div class="progress-line @GetProgressStageClass(order.Status, 7)"></div>
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 7)">
+                        <div class="circle">7</div>
+                        <div class="label">Completed</div>
+                    </div>
+                    <div class="progress-line @GetProgressStageClass(order.Status, 8)"></div>
+                    <div class="progress-stage @GetProgressStageClass(order.Status, 8)">
+                        <div class="circle">8</div>
+                        <div class="label">Cancelled</div>
+                    </div>
+                </div>
+
+                <h4>Items:</h4>
+                <div class="cart-items-container">
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <div class="cart-item glassmorphism">
+                            <div class="item-image">
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Book.CoverImage)" alt="@item.Book.Title" />
+                            </div>
+                            <div class="item-details">
+                                <h5 class="item-title">@item.Book.Title</h5>
+                                <div class="item-isbn">ISBN: @item.Book.ISBN</div>
+                                <div class="item-quantity">Quantity: @item.Quantity</div>
+                                <div class="item-price">Price: Rs. @item.Book.Price</div>
+                                <div class="item-total">Total: Rs. @(item.Book.Price * item.Quantity)</div>
+                                @if (order.Status == "Completed")
+                                {
+                                    <div class="rating" data-order-id="@order.Id" data-book-id="@item.Book.Id" data-rating="@item.Rating">
+                                        @for (double i = 1; i <= 5; i += 1)
+                                        {
+                                            var fullClass = i % 1 == 0 ? "full" : "half";
+                                            var selectedClass = i <= item.Rating ? "selected" : "";
+                                            <span class="star @fullClass @selectedClass" data-rating="@i">&#9733;</span>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function filterOrders() {
+        var filter = document.getElementById('orderStatusFilter').value.toLowerCase();
+        var orders = document.querySelectorAll('.order');
+
+        orders.forEach(function (order) {
+            var status = order.querySelector('.progress-stage.active .label').textContent.toLowerCase();
+            if (filter === 'all' || status.includes(filter)) {
+                order.style.display = 'block';
+            } else {
+                order.style.display = 'none';
+            }
+        });
+    }
+
+    document.querySelectorAll('.star').forEach(function (star) {
+        star.addEventListener('mouseenter', function () {
+            var rating = this.getAttribute('data-rating');
+            updateStarRating(this.closest('.rating'), rating);
+        });
+
+        star.addEventListener('mouseleave', function () {
+            var ratingElement = this.closest('.rating');
+            var rating = ratingElement.getAttribute('data-rating');
+            updateStarRating(ratingElement, rating);
+        });
+
+        star.addEventListener('click', function () {
+            var ratingElement = this.closest('.rating');
+            var orderId = ratingElement.getAttribute('data-order-id');
+            var bookId = ratingElement.getAttribute('data-book-id');
+            var rating = this.getAttribute('data-rating');
+
+            fetch('/ManageOrder/SubmitRating', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId: orderId, bookId: bookId, rating: rating })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        ratingElement.setAttribute('data-rating', rating);
+                        updateStarRating(ratingElement, rating);
+                    } else {
+                        alert('There was an error submitting your feedback. Please try again.');
+                    }
+                });
+        });
+    });
+
+    function updateStarRating(ratingElement, rating) {
+        ratingElement.querySelectorAll('.star').forEach(function (star) {
+            var starRating = parseFloat(star.getAttribute('data-rating'));
+            if (starRating <= rating) {
+                star.classList.add('selected');
+            } else {
+                star.classList.remove('selected');
+            }
+        });
+    }
+</script>
+<style>
+    body {
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .filter-container {
+        margin-bottom: 20px;
+        text-align: center;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+        .filter-container label, .filter-container select {
+            color: #fff;
+        }
+
+        .filter-container select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+    .order {
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+    .progress-bar-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .progress-stage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+
+        .progress-stage .circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .progress-stage.active .circle {
+            background: #4CAF50;
+        }
+
+    .progress-line {
+        width: 100px;
+        height: 5px;
+        background: #888;
+    }
+
+    .progress-stage.active + .progress-line {
+        background: #4CAF50;
+    }
+
+    .progress-stage.cancelled .circle {
+        background: red;
+    }
+
+    .progress-stage.cancelled + .progress-line {
+        background: red;
+    }
+
+    .progress-stage .label {
+        color: #888;
+    }
+
+    .progress-stage.active .label {
+        color: #fff;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .item-image img {
+        width: 80px;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .item-details {
+        flex-grow: 1;
+        margin-left: 20px;
+    }
+
+    .item-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .item-isbn {
+        font-size: 14px;
+        color: #aaaaaa;
+    }
+
+    .item-quantity, .item-price, .item-total {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .rating {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+        .rating .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+            .rating .star.selected {
+                color: #ffcc00;
+            }
+
+            .rating .star.hover {
+                color: #ffcc00;
+            }
+
+</style>
+
+@functions {
+    public static string GetProgressStageClass(string status, int stage)
+    {
+        var statuses = new List<string> { "Pending", "Confirmed", "Processing", "Packaged", "Shipped", "Delivered", "Completed", "Cancelled" };
+        int currentStage = statuses.IndexOf(status) + 1;
+        if (status == "Cancelled")
+        {
+            return "active cancelled";
+        }
+        return stage <= currentStage ? "active" : "";
+    }
+}

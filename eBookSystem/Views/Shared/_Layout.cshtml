@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - eBookSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/eBookSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/AdminStyle.css">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 30px !important; /* Adjust this value to set your desired height */
+        }
+
+        .navbar-list {
+            display: flex;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .navbar-link {
+            margin-right: 15px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+            .navbar-link:hover {
+                text-decoration: underline;
+            }
+
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            color: var(--white-1);
+            font-size: var(--fs-6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--eerie-black);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+            .dropdown-content a,
+            .dropdown-content button {
+                color: var(--white-1);
+                padding: 12px 16px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: none;
+                border: none;
+                text-align: left;
+                width: 100%;
+            }
+
+                .dropdown-content a:hover,
+                .dropdown-content button:hover {
+                    background-color: var(--granite-gray);
+                }
+
+        .profile-dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .profile-dropdown img {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-circle);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" data-header>
+        <div class="header-bottom" data-navbar>
+            <div class="container">
+                <nav class="navbar">
+                    <button class="nav-close-btn" data-nav-toggler aria-label="close menu" title="Close Menu">
+                        <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+                    </button>
+
+                    <div class="navbar-top">
+                        <input type="search" name="search" placeholder="Search our store" class="input-field">
+                        <button class="search-btn" aria-label="Search">
+                            <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+                        </button>
+                    </div>
+
+                    <ul class="navbar-list">
+                        <li><a asp-controller="Home" asp-action="Index" class="navbar-link">Home</a></li>
+                        <li><a asp-controller="Home" asp-action="Blog" class="navbar-link">Blog</a></li>
+                        <li><a asp-controller="Home" asp-action="BookStore" class="navbar-link">Shop</a></li>
+                        <li><a asp-controller="Home" asp-action="About" class="navbar-link">About Us</a></li>
+                        <li><a asp-controller="Home" asp-action="Contact" class="navbar-link">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <div class="navbar-list" style="margin-left: auto;">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="profile-dropdown">
+                            <button class="dropdown-btn">
+                                <img src="~/images/profile-user.png" alt="Profile">
+                                @User.Identity.Name
+                                <ion-icon name="chevron-down-outline"></ion-icon>
+                            </button>
+                            <div class="dropdown-content">
+                                <a asp-area="" asp-controller="Cart" asp-action="Index">
+                                    <ion-icon name="cart-outline"></ion-icon> Cart
+                                </a>
+                                <a asp-area="" asp-controller="manageOrder" asp-action="Index">
+                                    <ion-icon name="cart-outline"></ion-icon> Orders
+                                </a>
+                                <form method="post" asp-area="Identity" asp-page="/Account/Logout" id="logoutForm" class="navbar-link">
+                                    <button type="submit">
+                                        <ion-icon name="log-out-outline"></ion-icon> Logout
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <li><a href="/Identity/Account/Register" class="navbar-link">Signup</a></li>
+                        <li><a href="/Identity/Account/Login" class="navbar-link">Login</a></li>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="overlay" data-overlay data-nav-toggler></div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

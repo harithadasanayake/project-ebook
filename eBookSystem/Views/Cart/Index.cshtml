@@ -1,0 +1,256 @@
+﻿@model eBookSystem.Models.Cart
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<style>
+    body {
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .cart {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .item-image img {
+        width: 80px;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .item-details {
+        flex-grow: 1;
+        margin-left: 20px;
+    }
+
+    .item-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .item-isbn {
+        font-size: 14px;
+        color: #aaaaaa;
+    }
+
+    .item-quantity {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .quantity-form {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-btn {
+        background-color: var(--maximum-blue-green);
+        border: none;
+        font-size: 18px;
+        padding: 10px;
+        color: #ffffff;
+        cursor: pointer;
+        margin: 0 5px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s;
+    }
+
+        .quantity-btn:hover {
+            background-color: var(--selective-yellow);
+        }
+
+        .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .cancel-btn {
+        background-color: #913333;
+        border: none;
+        font-size: 18px;
+        padding: 10px;
+        color: #ffffff;
+        cursor: pointer;
+        margin: 0 5px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+        .cancel-btn:hover {
+            background-color: #631b1b;
+        }
+
+        .cancel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .item-price,
+    .item-total {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+        text-align: right;
+        min-width: 100px;
+    }
+
+    .item-action {
+        margin-left: 20px;
+    }
+
+        .item-action button {
+            background-color: var(--maximum-blue-green);
+            border: none;
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+            .item-action button:hover {
+                background-color: var(--selective-yellow);
+            }
+
+    .cart-footer {
+        margin-top: 20px;
+        text-align: right;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+    }
+
+    .clear-cart-btn,
+    .checkout-btn {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: 0.3s;
+        font-family: Arial, sans-serif;
+    }
+
+    .clear-cart-btn {
+        background-color: #ff5555;
+        color: #ffffff;
+    }
+
+        .clear-cart-btn:hover {
+            background-color: #e04a4a;
+        }
+
+    .checkout-btn {
+        background-color: var(--maximum-blue-green);
+        color: #ffffff;
+    }
+
+        .checkout-btn:hover {
+            background-color: var(--selective-yellow);
+        }
+</style>
+
+<div class="container mt-5">
+    <h2>@ViewData["Title"]</h2>
+    <div class="cart">
+        @foreach (var item in Model.CartItems)
+        {
+            <div class="cart-item glassmorphism">
+                <div class="item-image">
+                    <img src="data:image/png;base64,@Convert.ToBase64String(item.Book.CoverImage)" alt="@item.Book.Title" />
+                    @if (item.Book.Quantity == 0)
+                    {
+                        <div class="out-of-stock">Out of Stock</div>
+                    }
+                </div>
+                <div class="item-details">
+                    <h4 class="item-title">@item.Book.Title</h4>
+                    <div class="item-isbn">ISBN: @item.Book.ISBN</div>
+                    <div class="item-quantity">
+                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="quantity-form">
+                            <input type="hidden" name="cartItemId" value="@item.Id" />
+                            <input type="hidden" name="quantity" value="@item.Quantity - 1" />
+                            <button type="submit" class="quantity-btn" @((item.Quantity <= 1) ? "disabled" : "")>-</button>
+                        </form>
+                        <span class="quantity">@item.Quantity</span>
+                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="quantity-form">
+                            <input type="hidden" name="cartItemId" value="@item.Id" />
+                            <input type="hidden" name="quantity" value="@item.Quantity + 1" />
+                            <button type="submit" class="quantity-btn" @((item.Quantity >= item.Book.Quantity) ? "disabled" : "")>+</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="item-total">
+                    <div>@item.Quantity x Rs. @item.Book.Price = Rs. @(item.Quantity * item.Book.Price)</div>
+                </div>
+                <div class="item-action">
+                    <form asp-action="RemoveFromCart" method="post">
+                        <input type="hidden" name="cartItemId" value="@item.Id" />
+                        <button type="submit" class="btn btn-danger cancel-btn">&times;</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="cart-footer">
+        <form asp-action="ClearCart" method="post">
+            <button type="submit" class="clear-cart-btn">Clear Cart</button>
+        </form>
+        <div>
+            <h4>Total: Rs. @Model.CartItems.Sum(item => item.Quantity * item.Book.Price)</h4>
+            <form asp-controller="Order" asp-action="Checkout" method="get" style="display: inline;">
+                <input type="hidden" name="totalAmount" value="@Model.CartItems.Sum(item => item.Quantity * item.Book.Price)" />
+                <button type="submit" class="checkout-btn">Checkout</button>
+            </form>
+        </div>
+    </div>
+</div>

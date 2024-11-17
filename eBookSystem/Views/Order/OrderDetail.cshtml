@@ -1,0 +1,162 @@
+﻿@model eBookSystem.Models.OrderDetailViewModel
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h2>Order Details</h2>
+
+<div class="container">
+    <div class="order-information">
+        <h4>Order Information</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Order ID</dt>
+            <dd class="col-sm-10">@Model.Order.Id</dd>
+
+            <dt class="col-sm-2">Full Name</dt>
+            <dd class="col-sm-10">@Model.Order.FullName</dd>
+
+            <dt class="col-sm-2">Address</dt>
+            <dd class="col-sm-10">@Model.Order.Address</dd>
+
+            <dt class="col-sm-2">City</dt>
+            <dd class="col-sm-10">@Model.Order.City</dd>
+
+            <dt class="col-sm-2">State</dt>
+            <dd class="col-sm-10">@Model.Order.State</dd>
+
+            <dt class="col-sm-2">Zip Code</dt>
+            <dd class="col-sm-10">@Model.Order.ZipCode</dd>
+
+            <dt class="col-sm-2">Country</dt>
+            <dd class="col-sm-10">@Model.Order.Country</dd>
+
+            <dt class="col-sm-2">Total Amount</dt>
+            <dd class="col-sm-10">Rs. @Model.Order.TotalAmount</dd>
+
+            <dt class="col-sm-2">Order Date</dt>
+            <dd class="col-sm-10">@Model.Order.OrderDate</dd>
+
+            <dt class="col-sm-2">Status</dt>
+            <dd class="col-sm-10">@Model.Order.Status</dd>
+        </dl>
+    </div>
+
+    <div class="order-items">
+        <h4>Order Items</h4>
+        <div class="cart-items-container">
+            <ul class="list-group">
+                @foreach (var item in Model.OrderItems)
+                {
+                    <li class="list-group-item cart-item">
+                        <div class="item-image">
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Book.CoverImage)" alt="@item.Book.Title" />
+                        </div>
+                        <div class="item-details">
+                            <h4 class="item-title">@item.Book.Title</h4>
+                            <div class="item-isbn">ISBN: @item.Book.ISBN</div>
+                            <div class="item-quantity">Quantity: @item.Quantity</div>
+                            <div class="item-price">Price: Rs. @item.Book.Price</div>
+                            <div class="item-total">Total: Rs. @(item.Quantity * item.Book.Price)</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <p>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Back to Home</a>
+    </p>
+</div>
+
+<style>
+    body {
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .order-information, .order-items {
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+        .order-items .cart-items-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    .item-image img {
+        width: 80px;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .item-details {
+        flex-grow: 1;
+        margin-left: 20px;
+    }
+
+    .item-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .item-isbn {
+        font-size: 14px;
+        color: #aaaaaa;
+    }
+
+    .item-quantity, .item-price, .item-total {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        transition: background-color 0.3s;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+</style>

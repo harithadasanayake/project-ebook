@@ -1,0 +1,207 @@
+﻿@model List<eBookSystem.Models.Book>
+@{
+    ViewData["Title"] = "Book Store";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="~/assets/images/hero-banner.png">
+    <link rel="preload" as="image" href="~/assets/images/hero-bg.jpg">
+    <style>
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-input, .filter-select, .filter-button {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            max-width: 150px;
+            flex: 1;
+        }
+
+        .filter-button {
+            background-color: var(--maximum-blue-green);
+            color: var(--white-1);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            max-width: 150px;
+        }
+
+            .filter-button:hover {
+                background-color: var(--selective-yellow);
+            }
+
+        .sold-out {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .opacity-low {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body id="top">
+    <main>
+        <article>
+            <section class="section featured" aria-label="featured collection">
+                <div class="container">
+                    <div class="filter-container">
+                        <input type="text" id="searchInput" placeholder="Search for books..." class="filter-input" oninput="applyFilters()">
+                        <select id="sortOptions" class="filter-select" onchange="applyFilters()">
+                            <option value="asc">Price: Low to High</option>
+                            <option value="desc">Price: High to Low</option>
+                            <option value="rating">Rating</option>
+                        </select>
+                        <input type="number" id="minPrice" placeholder="Min Price" class="filter-input">
+                        <input type="number" id="maxPrice" placeholder="Max Price" class="filter-input">
+                        <button onclick="applyPriceFilter()" class="filter-button">Apply Price Filter</button>
+                        <button onclick="resetFilters()" class="filter-button">Reset Filters</button>
+                    </div>
+                    <ul id="bookList" class="grid-list">
+                        @foreach (var book in Model)
+                        {
+                            <li class="book-item" data-title="@book.Title" data-price="@book.Price" data-rating="@book.AverageRating">
+                                <div class="product-card @((book.Quantity == 0) ? "opacity-low" : "")">
+                                    <span class="card-badge">New</span>
+                                    <div class="card-banner img-holder" style="--width: 384; --height: 480;">
+                                        <img src="data:image/png;base64,@Convert.ToBase64String(book.CoverImage)" width="384" height="480" loading="lazy" alt="@book.Title" class="img-cover">
+                                        <div class="card-action">
+                                            <a href="@Url.Action("Details", "Book", new { id = book.Id })" class="action-btn" aria-label="quick view" title="Quick View">
+                                                <ion-icon name="eye-outline" aria-hidden="true"></ion-icon>
+                                            </a>
+                                            <button class="action-btn" aria-label="add to wishlist" title="Add to Wishlist">
+                                                <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+                                            </button>
+                                            <button class="action-btn" aria-label="compare" title="Compare">
+                                                <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+                                            </button>
+                                            <button class="action-btn" aria-label="add to cart" title="Add to Cart">
+                                                <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+                                            </button>
+                                        </div>
+                                        @if (book.Quantity == 0)
+                                        {
+                                            <div class="sold-out">Sold Out</div>
+                                        }
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="h3">
+                                            <a href="@Url.Action("Details", "Book", new { id = book.Id })" class="card-title">@book.Title</a>
+                                        </h3>
+                                        <data class="card-price" value="@book.Price">Rs. @book.Price</data>
+                                        <div class="rating-wrapper">
+                                            @for (double i = 1; i <= 5; i += 1)
+                                            {
+                                                var avgRating = book.AverageRating ?? 0;
+
+                                                if (i <= avgRating)
+                                                {
+                                                    <ion-icon name="star" aria-hidden="true"></ion-icon>
+                                                }
+                                                else
+                                                {
+                                                    <ion-icon name="star-outline" aria-hidden="true"></ion-icon>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+        </article>
+    </main>
+    <script src="~/assets/js/script.js" defer></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById("searchInput").addEventListener("input", applyFilters);
+            document.getElementById("sortOptions").addEventListener("change", applyFilters);
+        });
+
+        function applyFilters() {
+            var searchInput = document.getElementById("searchInput").value.toLowerCase();
+            var sortOption = document.getElementById("sortOptions").value;
+            var bookItems = document.querySelectorAll(".book-item");
+
+            var filteredBooks = Array.from(bookItems).filter(function (item) {
+                var title = item.getAttribute("data-title").toLowerCase();
+                return title.includes(searchInput);
+            });
+
+            if (sortOption === "asc") {
+                filteredBooks.sort(function (a, b) {
+                    return parseFloat(a.getAttribute("data-price")) - parseFloat(b.getAttribute("data-price"));
+                });
+            } else if (sortOption === "desc") {
+                filteredBooks.sort(function (a, b) {
+                    return parseFloat(b.getAttribute("data-price")) - parseFloat(a.getAttribute("data-price"));
+                });
+            } else if (sortOption === "rating") {
+                filteredBooks.sort(function (a, b) {
+                    return parseFloat(b.getAttribute("data-rating")) - parseFloat(a.getAttribute("data-rating"));
+                });
+            }
+
+            var bookList = document.getElementById("bookList");
+            bookList.innerHTML = "";
+            filteredBooks.forEach(function (item) {
+                bookList.appendChild(item);
+            });
+        }
+
+        function applyPriceFilter() {
+            var minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
+            var maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+            var bookItems = document.querySelectorAll(".book-item");
+
+            var filteredBooks = Array.from(bookItems).filter(function (item) {
+                var price = parseFloat(item.getAttribute("data-price"));
+                return price >= minPrice && price <= maxPrice;
+            });
+
+            var bookList = document.getElementById("bookList");
+            bookList.innerHTML = "";
+            filteredBooks.forEach(function (item) {
+                bookList.appendChild(item);
+            });
+        }
+
+        function resetFilters() {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("sortOptions").selectedIndex = 0;
+            document.getElementById("minPrice").value = "";
+            document.getElementById("maxPrice").value = "";
+
+            applyFilters();
+        }
+    </script>
+</body>
+
+</html>

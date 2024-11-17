@@ -1,0 +1,250 @@
+﻿@model eBookSystem.Models.Book
+
+@{
+    ViewData["Title"] = "Add a Book";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - eBookSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/eBookSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/admin/book.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+            .form-group > div {
+                flex: 1 1 calc(50% - 10px);
+            }
+
+        form {
+            background-color: #202528;
+            padding: 20px;
+            border-radius: 10px;
+            margin-left:25px !important;
+            width: 110%;
+            margin: auto;
+            color: white;
+        }
+
+        input[type=text], input[type=date], input[type=number], select, textarea {
+            background-color: #33414a;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+            input[type=text]:hover, input[type=date]:hover, input[type=number]:hover, select:hover, textarea:hover {
+                background-color: #4a5b66;
+            }
+
+        select {
+            width: 100%;
+        }
+
+        aside {
+            width: 200px;
+            margin-right: 20px;
+            flex: 0 0 auto;
+        }
+
+        .sidebar {
+            padding: 20px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+            .nav .dark-mode {
+                margin-left: auto;
+            }
+
+            .nav .profile {
+                display: flex;
+                align-items: center;
+                margin-left: 20px;
+            }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #6200ee;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #3700b3;
+            }
+
+        .image-upload {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+            .image-upload input[type=file] {
+                display: none;
+            }
+
+            .image-upload label {
+                background-color: #6200ee;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                .image-upload label:hover {
+                    background-color: #3700b3;
+                }
+
+        .image-preview {
+            width: 150px;
+            height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #464646;
+            color: #999;
+        }
+
+            .image-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Add a Book</h1>
+        <form asp-action="Book" asp-controller="Book" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div>
+                    <input type="text" id="title" name="Title" placeholder="Book Title" value="@Model?.Title" required>
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="text" id="author" name="Author" placeholder="Author" value="@Model?.Author" required>
+                    @Html.ValidationMessageFor(model => model.Author, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="text" id="isbn" name="ISBN" placeholder="ISBN" value="@Model?.ISBN" required>
+                    @Html.ValidationMessageFor(model => model.ISBN, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="text" id="publisher" name="Publisher" placeholder="Publisher" value="@Model?.Publisher" required>
+                    @Html.ValidationMessageFor(model => model.Publisher, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="number" id="publicationDate" name="PublishedYear" placeholder="Publication Date" value="@Model?.PublishedYear" required>
+                    @Html.ValidationMessageFor(model => model.PublishedYear, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="text" id="edition" name="Edition" placeholder="Edition" value="@Model?.Edition" required>
+                    @Html.ValidationMessageFor(model => model.Edition, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="number" id="price" name="Price" step="0.01" placeholder="Price" value="@Model?.Price" required>
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="number" id="quantity" name="Quantity" placeholder="Quantity Available" value="@Model?.Quantity" required>
+                    @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <select id="condition" name="Condition" required>
+                        <option value="" disabled selected>Condition</option>
+                        <option value="new">New</option>
+                        <option value="used">Used</option>
+                        <option value="damaged">Damaged</option>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Condition, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <textarea id="description" name="Description" placeholder="Description" required>@Model?.Description</textarea>
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <div class="image-upload">
+                        <div class="image-preview" id="imagePreview" style="background-image: url('/images/defaultCover.png');">
+                            <span>📚</span>
+                        </div>
+                        <label for="coverImage">Choose File</label>
+                        <input type="file" id="coverImage" name="CoverImage" accept="image/*" onchange="showImagePreview(event)">
+                    </div>
+                </div>
+            </div>
+            <button type="submit">Add Book</button>
+        </form>
+
+        <script>
+            function showImagePreview(event) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const output = document.getElementById('imagePreview');
+                    output.style.backgroundImage = `url(${reader.result})`;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
+    </main>
+</body>
+</html>
+
+@{
+    if (TempData["msg"] != null)
+    {
+        <script>
+            alert('@TempData["msg"]')
+        </script>
+    }
+}
