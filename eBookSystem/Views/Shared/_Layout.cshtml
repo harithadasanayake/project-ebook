@@ -12,28 +12,38 @@
     <link rel="stylesheet" href="~/assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+
     <style>
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 30px !important; /* Adjust this value to set your desired height */
+            height: 30px !important;
         }
 
         .navbar-list {
             display: flex;
             list-style: none;
             padding-left: 0;
+
+            
         }
 
         .navbar-link {
             margin-right: 15px;
             text-decoration: none;
             color: inherit;
+            font-weight:400;
+            font-family: 'Inter', sans-serif;
         }
 
             .navbar-link:hover {
-                text-decoration: underline;
+               font-weight: 500;
+
             }
 
         .profile-dropdown {
@@ -50,13 +60,14 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-top: 10px
         }
 
         .dropdown-content {
             display: none;
             position: absolute;
             right: 0;
-            background-color: var(--eerie-black);
+            background-color:#FFFFFF;
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
@@ -84,12 +95,18 @@
 
         .profile-dropdown:hover .dropdown-content {
             display: block;
+           
         }
 
         .profile-dropdown img {
             width: 30px;
             height: 30px;
             border-radius: var(--radius-circle);
+        }
+
+        .logout-btn{
+
+
         }
     </style>
 </head>
@@ -112,14 +129,13 @@
 
                     <ul class="navbar-list">
                         <li><a asp-controller="Home" asp-action="Index" class="navbar-link">Home</a></li>
-                        <li><a asp-controller="Home" asp-action="Blog" class="navbar-link">Blog</a></li>
                         <li><a asp-controller="Home" asp-action="BookStore" class="navbar-link">Shop</a></li>
                         <li><a asp-controller="Home" asp-action="About" class="navbar-link">About Us</a></li>
                         <li><a asp-controller="Home" asp-action="Contact" class="navbar-link">Contact</a></li>
                     </ul>
                 </nav>
 
-                <div class="navbar-list" style="margin-left: auto;">
+                <div class="navbar-list" style="margin-left: auto; margin-top: 20px">
                     @if (User.Identity.IsAuthenticated)
                     {
                         <div class="profile-dropdown">
@@ -142,6 +158,11 @@
                                 </form>
                             </div>
                         </div>
+                        <form method="post" asp-area="Identity" asp-page="/Account/Logout" id="logoutForm" class="navbar-link">
+                            <button type="submit" class="logout-btn">
+                                 Logout
+                            </button>
+                        </form>
                     }
                     else
                     {

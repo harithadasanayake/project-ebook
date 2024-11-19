@@ -17,7 +17,7 @@
     --spanish-gray: hsl(0, 0%, 57%);
     --oxford-blue: hsl(243, 95%, 8%);
     --eerie-black: hsl(214, 10%, 14%);
-    --xiketic: hsl(240, 100%, 6%);
+    --xiketic: #FFFFFF;
     --white-1: hsl(0, 0%, 100%);
     --white-2: hsl(0, 0%, 98%);
     --white_10: hsla(0, 0%, 100%, 0.1);
@@ -26,8 +26,8 @@
    * typography
    */
 
-    --ff-work-sans: 'Work Sans', sans-serif;
-    --ff-jost: 'Jost', sans-serif;
+    --ff-work-sans: 'Inter', sans-serif;
+    --ff-jost: 'Poppins', sans-serif;
     --fs-1: 3.2rem;
     --fs-2: 2.4rem;
     --fs-3: 2.2rem;
@@ -517,6 +517,7 @@ body {
 .navbar-list {
     border-block: 1px solid var(--white-1);
     padding-block: 30px;
+    font-family: var(--ff-work-sans)
 }
 
 .navbar-link {
