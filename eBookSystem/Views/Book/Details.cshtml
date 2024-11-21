@@ -74,7 +74,7 @@
             font-size: 1.5rem;
             font-family: var(--ff-work-sans);
             margin-bottom: 10px;
-            color: #fc979d;
+            color: #022332;
         }
 
         .rating-wrapper {
@@ -106,21 +106,25 @@
             align-items: center;
             gap: 10px;
             margin: 20px 0;
+            font-weight:bold
         }
 
             .quantity-selector button {
-                padding: 10px;
+
                 font-size: 1rem;
-                border: none;
-                background-color: #022332;
-                color: white;
+                border: 1px solid #022332;
+                background-color: transparent;
+                color: #022332;
                 cursor: pointer;
-                border-radius: 4px;
+                border-radius: 100px;
                 transition: background-color 0.3s;
+                width:30px;
+                height: 30px
             }
 
                 .quantity-selector button:hover {
-                    background-color: var(--selective-yellow);
+                    background-color: #022332;
+                    color: white
                 }
 
             .quantity-selector span {
@@ -252,6 +256,22 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        .btn-buy{
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 20px;
+            border: 1px solid #022332;
+            font-weight: 600;
+        }
+
+        .btn-buy:hover {
+            background-color: #022332;
+            color: white
+        }
+
     </style>
 </head>
 
@@ -303,12 +323,12 @@
                                     <form id="buyNowForm" asp-controller="DirectOrder" asp-action="Checkout" method="get">
                                         <input type="hidden" name="bookId" value="@Model.Id" />
                                         <input type="hidden" name="quantity" id="quantity-input-buy-now" value="1" />
-                                        <button type="button" id="buyNowButton" class="btn btn-secondary @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Buy Now</button>
+                                        <button type="button" id="buyNowButton" class="btn-buy @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Buy Now</button>
                                     </form>
                                     <form id="addToCartForm" asp-controller="Cart" asp-action="AddToCart" method="post">
                                         <input type="hidden" name="bookId" value="@Model.Id" />
                                         <input type="hidden" name="quantity" id="quantity-input" value="1" />
-                                        <button type="button" id="addToCartButton" class="btn btn-primary @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Add to Cart</button>
+                                        <button type="button" id="addToCartButton" class="btn-buy @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Add to Cart</button>
                                     </form>
                                 </div>
                             </div>

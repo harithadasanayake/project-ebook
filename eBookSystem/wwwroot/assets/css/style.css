@@ -1083,7 +1083,7 @@ body {
     display: block;
   }
 
-  .header-bottom { padding-block: 20px; }
+  .header-bottom { padding-bottom: 20px; }
 
   .header-bottom .container {
     display: flex;
