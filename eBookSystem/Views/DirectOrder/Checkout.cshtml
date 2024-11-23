@@ -76,7 +76,7 @@
 
 <style>
     body {
-        color: #ffffff;
+        color: #000000;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
@@ -93,6 +93,11 @@
         margin-bottom: 30px;
     }
 
+    h3{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
     .checkout-content {
         display: flex;
         gap: 20px;
@@ -104,7 +109,6 @@
         padding: 20px;
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        border-radius: 15px;
         position: relative;
         height: 600px;
     }
@@ -127,7 +131,6 @@
         justify-content: space-between;
         align-items: center;
         padding: 20px;
-        border-radius: 15px;
         background: rgba(255, 255, 255, 0.1);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         margin-bottom: 10px;
@@ -136,7 +139,6 @@
     .item-image img {
         width: 80px;
         height: auto;
-        border-radius: 10px;
     }
 
     .item-details {
@@ -187,7 +189,6 @@
         align-items: center;
         padding: 20px;
         background: rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
         position: sticky;
         bottom: 0;
         width: 100%;
@@ -196,7 +197,6 @@
     .clear-cart-btn, .checkout-btn {
         padding: 15px 30px;
         border: none;
-        border-radius: 50px;
         cursor: pointer;
         font-size: 1rem;
         transition: 0.3s;
@@ -228,17 +228,13 @@
     .form-control {
         width: 100%;
         padding: 10px;
-        border-radius: 5px;
         border: 1px solid #ccc;
         box-sizing: border-box;
-        background-color: #33414a;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #000000;
     }
 
-        .form-control:focus {
-            background-color: #4a5b66;
-            border-color: #4a5b66;
-        }
+
 
     label {
         display: block;
@@ -249,7 +245,6 @@
     button[type="submit"] {
         padding: 15px 30px;
         border: none;
-        border-radius: 5px;
         cursor: pointer;
         font-size: 1rem;
         transition: 0.3s;
@@ -260,4 +255,5 @@
         button[type="submit"]:hover {
             background-color: #3700b3;
         }
+
 </style>

@@ -29,6 +29,15 @@
             margin-bottom: 20px;
         }
 
+        .manage-books-main {
+            padding-left: 30px;
+        }
+
+        .manage-books-main h1 {
+            margin-left: -40px;
+            margin-bottom: 50px;
+        }
+
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -47,7 +56,6 @@
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
             color: white;
         }
 
@@ -56,9 +64,8 @@
         }
 
         .table-container {
-            background-color: #33414a;
+            background-color: #c4c4c4;
             padding: 20px;
-            border-radius: 10px;
             width: 150%;
             overflow: hidden;
             margin-left: -40px;
@@ -67,23 +74,22 @@
         table.modernTable {
             width: 100%;
             border-collapse: collapse;
-            background-color: #1e2027;
-            color: #E0E0E0;
-            border-radius: 8px;
+            background-color: #ffffff;
+            color: #000000;
             overflow: hidden;
         }
 
             table.modernTable th {
-                background-color: #1e2027;
+                background-color: #ffffff;
                 padding: 12px;
-                border-bottom: 1px solid #1e2027;
+                border-bottom: 1px solid #ffffff;
                 cursor: pointer;
             }
 
                 table.modernTable th.sortable:after {
                     content: " \25B2"; /* up arrow */
                     font-size: 0.8em;
-                    color: #aaa;
+                    color: #000000;
                     padding-left: 5px;
                 }
 
@@ -93,17 +99,14 @@
 
             table.modernTable td {
                 padding: 12px;
-                border-bottom: 1px solid #1e2027;
+                border-bottom: 1px solid #ffffff;
             }
 
-            table.modernTable tr:nth-child(even) {
-                background-color: #16181e;
-            }
+
 
         .btn-primary, .btn-danger {
-            background-color: #6200ee;
+            background-color: #000000;
             border: none;
-            border-radius: 12px;
             width: 24px;
             height: 24px;
             margin-bottom: 14px;
@@ -114,7 +117,7 @@
         }
 
             .btn-primary:hover, .btn-danger:hover {
-                background-color: #3700b3;
+                background-color: #36454F;
             }
 
         .btn-danger {
@@ -130,23 +133,20 @@
             gap: 10px;
         }
 
-            .action-icons .btn .icon {
-                margin-right: 5px;
-            }
+
 
         .btn-download {
-            background-color: #007bff;
+            background-color: #000000;
             color: white;
             border: none;
             padding: 10px 20px;
             margin: 10px 5px;
-            border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
             .btn-download:hover {
-                background-color: #0056b3;
+                background-color: #36454F;
             }
 
         .header-container {
@@ -168,7 +168,7 @@
 </head>
 
 <body>
-    <main>
+    <main class="manage-books-main">
         <div class="container">
             <div class="content">
                 <h1>Manage Books</h1>
