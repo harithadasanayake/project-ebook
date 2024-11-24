@@ -142,7 +142,7 @@
 </head>
 <body>
     <main>
-        <h1>Analytics</h1>
+        <h1>Dashboard</h1>
         <div class="analyse">
             <div class="sales">
                 <div class="status">
@@ -150,14 +150,7 @@
                         <h3>Total Sales</h3>
                         <h1>@Model.TotalSales.ToString("C")</h1>
                     </div>
-                    <div class="progresss">
-                        <svg>
-                            <circle cx="38" cy="38" r="36"></circle>
-                        </svg>
-                        <div class="percentage">
-                            <p>+81%</p>
-                        </div>
-                    </div>
+                  
                 </div>
             </div>
             <div class="visits">
@@ -166,14 +159,7 @@
                         <h3>Total Sales Count</h3>
                         <h1>@Model.TotalSalesCount</h1>
                     </div>
-                    <div class="progresss">
-                        <svg>
-                            <circle cx="38" cy="38" r="36"></circle>
-                        </svg>
-                        <div class="percentage">
-                            <p>-48%</p>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
             <div class="searches">
@@ -182,37 +168,12 @@
                         <h3>Total Users</h3>
                         <h1>@Model.TotalUsers</h1>
                     </div>
-                    <div class="progresss">
-                        <svg>
-                            <circle cx="38" cy="38" r="36"></circle>
-                        </svg>
-                        <div class="percentage">
-                            <p>+21%</p>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
 
-        <div class="new-users">
-            <h2>Most Popular Books</h2>
-            <div class="user-list">
-                @if (Model.MostPopularBooks != null && Model.MostPopularBooks.Count > 0)
-                {
-                    @foreach (var book in Model.MostPopularBooks)
-                    {
-                        <div class="book">
-                            <img src="data:image/jpeg;base64,@(book.CoverImage != null ? Convert.ToBase64String(book.CoverImage) : "")" alt="Book Cover" />
-                        </div>
-                    }
-                }
-                else
-                {
-                    <p>No popular books found.</p>
-                }
-            </div>
-        </div>
-
+        
         <div class="recent-orders">
             <h2>Recent Orders</h2>
             <table class="table table-striped">
@@ -249,6 +210,26 @@
             </table>
             <a href="#">Show All</a>
         </div>
+
+        <div class="new-users">
+            <h2>Most Popular Books</h2>
+            <div class="user-list">
+                @if (Model.MostPopularBooks != null && Model.MostPopularBooks.Count > 0)
+                {
+                    @foreach (var book in Model.MostPopularBooks)
+                    {
+                        <div class="book">
+                            <img src="data:image/jpeg;base64,@(book.CoverImage != null ? Convert.ToBase64String(book.CoverImage) : "")" alt="Book Cover" />
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No popular books found.</p>
+                }
+            </div>
+        </div>
+
     </main>
     <script src="~/assets/js/orders.js"></script>
     <script src="~/assets/js/mode.js"></script>
