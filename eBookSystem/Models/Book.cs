@@ -16,8 +16,8 @@ namespace eBookSystem.Models
         public int? Quantity { get; set; }
         public string Condition { get; set; }
         public string Description { get; set; }
-        public byte[] CoverImage { get; set; } // Ensure this is not marked as required
-        public double? AverageRating { get; set; } // Ensure this is not marked as required
-        public List<Review> Reviews { get; set; } = new List<Review>(); // Add Reviews property
+        public byte[] CoverImage { get; set; } 
+        public double? AverageRating { get; set; } 
+        public List<Review> Reviews { get; set; } = new List<Review>(); 
     }
 }
