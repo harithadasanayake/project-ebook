@@ -15,7 +15,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Work+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <style>
@@ -53,10 +55,10 @@
             flex: 1;
         }
 
-            .book-image img {
-                width: 100%;
-                border-radius: 8px;
-            }
+        .book-image img {
+            width: 100%;
+            border-radius: 8px;
+        }
 
         .book-info {
             flex: 2;
@@ -83,10 +85,10 @@
             margin-bottom: 10px;
         }
 
-            .rating-wrapper ion-icon {
-                font-size: 1.5rem;
-                color: #ffc107;
-            }
+        .rating-wrapper ion-icon {
+            font-size: 1.5rem;
+            color: #ffc107;
+        }
 
         .book-price {
             font-size: 1.5rem;
@@ -106,32 +108,32 @@
             align-items: center;
             gap: 10px;
             margin: 20px 0;
-            font-weight:bold
+            font-weight: bold
         }
 
-            .quantity-selector button {
+        .quantity-selector button {
 
-                font-size: 1rem;
-                border: 1px solid #022332;
-                background-color: transparent;
-                color: #022332;
-                cursor: pointer;
-                border-radius: 100px;
-                transition: background-color 0.3s;
-                width:30px;
-                height: 30px
-            }
+            font-size: 1rem;
+            border: 1px solid #022332;
+            background-color: transparent;
+            color: #022332;
+            cursor: pointer;
+            border-radius: 100px;
+            transition: background-color 0.3s;
+            width: 30px;
+            height: 30px
+        }
 
-                .quantity-selector button:hover {
-                    background-color: #022332;
-                    color: white
-                }
+        .quantity-selector button:hover {
+            background-color: #022332;
+            color: white
+        }
 
-            .quantity-selector span {
-                font-size: 1.2rem;
-                font-family: var(--ff-work-sans);
-                padding: 0 10px;
-            }
+        .quantity-selector span {
+            font-size: 1.2rem;
+            font-family: var(--ff-work-sans);
+            padding: 0 10px;
+        }
 
         .btn-wrapper {
             display: flex;
@@ -153,18 +155,18 @@
             color: var(--white-1);
         }
 
-            .btn-primary:hover {
-                background-color: var(--selective-yellow);
-            }
+        .btn-primary:hover {
+            background-color: var(--selective-yellow);
+        }
 
         .btn-secondary {
             background-color: var(--eerie-black);
             color: var(--white-1);
         }
 
-            .btn-secondary:hover {
-                background-color: var(--spanish-gray);
-            }
+        .btn-secondary:hover {
+            background-color: var(--spanish-gray);
+        }
 
         .similar-books h2 {
             font-size: 2rem;
@@ -185,16 +187,16 @@
             transition: transform 0.3s;
         }
 
-            .similar-book img {
-                width: 100px;
-                height: 150px;
-                border-radius: 8px;
-                object-fit: cover;
-            }
+        .similar-book img {
+            width: 100px;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
 
-            .similar-book:hover .card-action {
-                display: flex;
-            }
+        .similar-book:hover .card-action {
+            display: flex;
+        }
 
         .card-action {
             display: none;
@@ -213,12 +215,31 @@
             margin-top: 40px;
         }
 
-            .reviews h2 {
-                font-size: 2rem;
-                font-family: var(--ff-jost);
-                color: var (--maximum-blue-green);
-                margin-bottom: 20px;
-            }
+        .write-review {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .write-review::placeholder {
+            margin: 0;
+        }
+
+        .reviews h2 {
+            font-size: 2rem;
+            font-family: var(--ff-jost);
+            color: var (--maximum-blue-green);
+            margin-bottom: 20px;
+        }
+
+        .review-info {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
 
         .review-list {
             display: flex;
@@ -230,11 +251,11 @@
             background-color: var(--white-2);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .reviewer {
             font-size: 1.2rem;
+            font-weight: 600;
             font-family: var (--ff-jost);
             color: var (--granite-gray);
             margin-bottom: 10px;
@@ -257,7 +278,7 @@
             cursor: not-allowed;
         }
 
-        .btn-buy{
+        .btn-buy {
             padding-top: 10px;
             padding-bottom: 10px;
             padding-left: 20px;
@@ -271,7 +292,6 @@
             background-color: #022332;
             color: white
         }
-
     </style>
 </head>
 
@@ -283,7 +303,8 @@
                     <div class="book-main">
                         <div class="book-details-grid">
                             <div class="book-image">
-                                <img src="data:image/png;base64,@Convert.ToBase64String(Model.CoverImage)" alt="@Model.Title" class="img-cover">
+                                <img src="data:image/png;base64,@Convert.ToBase64String(Model.CoverImage)"
+                                    alt="@Model.Title" class="img-cover">
                                 @if (Model.Quantity == 0)
                                 {
                                     <div class="out-of-stock">Out of Stock</div>
@@ -320,38 +341,60 @@
                                 }
                                 <input type="hidden" id="isUserLoggedIn" value="@User.Identity.Name;" />
                                 <div class="btn-wrapper">
-                                    <form id="buyNowForm" asp-controller="DirectOrder" asp-action="Checkout" method="get">
+                                    <form id="buyNowForm" asp-controller="DirectOrder" asp-action="Checkout"
+                                        method="get">
                                         <input type="hidden" name="bookId" value="@Model.Id" />
                                         <input type="hidden" name="quantity" id="quantity-input-buy-now" value="1" />
-                                        <button type="button" id="buyNowButton" class="btn-buy @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Buy Now</button>
+                                        <button type="button" id="buyNowButton"
+                                            class="btn-buy @(Model.Quantity == 0 ? "btn-disabled" : "")"
+                                        @(Model.Quantity == 0 ? "disabled" : "")>Buy Now</button>
                                     </form>
                                     <form id="addToCartForm" asp-controller="Cart" asp-action="AddToCart" method="post">
                                         <input type="hidden" name="bookId" value="@Model.Id" />
                                         <input type="hidden" name="quantity" id="quantity-input" value="1" />
-                                        <button type="button" id="addToCartButton" class="btn-buy @(Model.Quantity == 0 ? "btn-disabled" : "")" @(Model.Quantity == 0 ? "disabled" : "")>Add to Cart</button>
+                                        <button type="button" id="addToCartButton"
+                                            class="btn-buy @(Model.Quantity == 0 ? "btn-disabled" : "")"
+                                        @(Model.Quantity == 0 ? "disabled" : "")>Add to Cart</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <form asp-action="AddReview" asp-controller="Book" method="post">
+                                <input type="hidden" name="BookId" value="@Model.Id" />
+                                <textarea name="ReviewText" id="review" class="write-review"
+                                    placeholder="Write a review"></textarea>
+                                <button type="submit" class="btn-buy">Submit</button>
+                            </form>
+                        </div>
+
                         <div class="reviews">
                             <h2>Reviews</h2>
                             <div class="review-list">
-                                <div class="review">
-                                    <p class="reviewer">Reviewer 1</p>
-                                    <p class="review-text">Great book!</p>
-                                </div>
-                                <div class="review">
-                                    <p class="reviewer">Reviewer 2</p>
-                                    <p class="review-text">Very interesting read.</p>
-                                </div>
-                                <div class="review">
-                                    <p class="reviewer">Reviewer 3</p>
-                                    <p class="review-text">I loved it.</p>
-                                </div>
+                                @if (Model.Reviews != null && Model.Reviews.Any())
+                                {
+                                    foreach (var review in Model.Reviews)
+                                    {
+                                        <div class="review">
+                                            <div class="review-info">
+                                                <p class="reviewer">@review.UserName</p> <span class="reviewer">•</span>
+                                                <p class="reviewer">
+                                                    @review.Timestamp.ToString("MMM dd, yyyy")</p>
+                                            </div>
+
+                                            <p class="review-text">@review.ReviewText</p>
+
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No reviews yet. Be the first to review this book!</p>
+                                }
                             </div>
                         </div>
                     </div>
-                  
+
                 </div>
             </div>
         </section>

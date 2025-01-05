@@ -84,7 +84,7 @@ public class OrderController : Controller
             // Clear the cart
             _database.ClearCart(cart.Id);
             // Create Stripe checkout session
-    
+
             var sessionUrl = CreateCheckoutSession(model.TotalAmount, order.Id);
 
             return Redirect(sessionUrl);

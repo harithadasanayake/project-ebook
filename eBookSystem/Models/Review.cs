@@ -7,6 +7,7 @@ namespace eBookSystem.Models
         public int Id { get; set; }
         public int BookId { get; set; }
         public string UserId { get; set; }
+        public string UserName { get; set; }
         public string ReviewText { get; set; }
         public DateTime Timestamp { get; set; }
     }
