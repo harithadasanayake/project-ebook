@@ -6,8 +6,9 @@ namespace eBookSystem.Models
 {
     public class Database
     {
-        private readonly string _connectionString = "Data Source=DESKTOP-F5RJ22B\\SQLEXPRESS;Initial Catalog=ebook;Integrated Security=True;TrustServerCertificate=True";
-        
+        private readonly string _connectionString = "Data Source=THARINDU\\SQLEXPRESS;Initial Catalog=ebook;Integrated Security=True;TrustServerCertificate=True";
+        // Data Source=THARINDU\\SQLEXPRESS;Initial Catalog=ebook;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False
+
         public string InsertBook(Book book)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -40,38 +41,38 @@ namespace eBookSystem.Models
             }
         }
 
-      public List<Book> GetAllBooks()
-{
-    var books = new List<Book>();
-    using (var connection = new SqlConnection(_connectionString))
-    {
-        var query = "SELECT Id, Title,Author,ISBN,Publisher,PublishedYear, Price, Quantity, CoverImage, AverageRating FROM Books";
-        using (var command = new SqlCommand(query, connection))
+        public List<Book> GetAllBooks()
         {
-            connection.Open();
-            using (var reader = command.ExecuteReader())
+            var books = new List<Book>();
+            using (var connection = new SqlConnection(_connectionString))
             {
-                while (reader.Read())
+                var query = "SELECT Id, Title,Author,ISBN,Publisher,PublishedYear, Price, Quantity, CoverImage, AverageRating FROM Books";
+                using (var command = new SqlCommand(query, connection))
                 {
-                    books.Add(new Book
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
                     {
-                       Id = reader.GetInt32(0),
-                    Title = reader.GetString(1),
-                    Author = reader.GetString(2),  // Ensure data is being read correctly
-                    ISBN = reader.GetString(3),    // Ensure data is being read correctly
-                    Publisher = reader.GetString(4),
-                    PublishedYear = reader.GetInt32(5),
-                    Price = reader.IsDBNull(6) ? (decimal?)null : reader.GetDecimal(6),
-                    Quantity = reader.GetInt32(7),
-                    CoverImage = reader["CoverImage"] as byte[],
-                     AverageRating = reader["AverageRating"] as double? // Ensure it is read as nullable double
-                    });
+                        while (reader.Read())
+                        {
+                            books.Add(new Book
+                            {
+                                Id = reader.GetInt32(0),
+                                Title = reader.GetString(1),
+                                Author = reader.GetString(2),  // Ensure data is being read correctly
+                                ISBN = reader.GetString(3),    // Ensure data is being read correctly
+                                Publisher = reader.GetString(4),
+                                PublishedYear = reader.GetInt32(5),
+                                Price = reader.IsDBNull(6) ? (decimal?)null : reader.GetDecimal(6),
+                                Quantity = reader.GetInt32(7),
+                                CoverImage = reader["CoverImage"] as byte[],
+                                AverageRating = reader["AverageRating"] as double? // Ensure it is read as nullable double
+                            });
+                        }
+                    }
                 }
             }
+            return books;
         }
-    }
-    return books;
-}
         public Book GetBookById(int id)
         {
             Book book = null;
@@ -101,7 +102,7 @@ namespace eBookSystem.Models
                             Condition = reader.GetString(9),
                             Description = reader.GetString(10),
                             CoverImage = reader.IsDBNull(11) ? null : (byte[])reader[11],
-                             AverageRating = reader["AverageRating"] as double?
+                            AverageRating = reader["AverageRating"] as double?
                         };
                     }
                 }
@@ -112,6 +113,70 @@ namespace eBookSystem.Models
             }
 
             return book;
+        }
+
+        public string InsertReview(Review review)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                try
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Review (BookId, UserId, UserName, ReviewText, Timestamp) VALUES (@BookId, @UserId, @UserName, @ReviewText, @Timestamp)", con);
+
+                    cmd.Parameters.AddWithValue("@BookId", review.BookId);
+                    cmd.Parameters.AddWithValue("@UserId", review.UserId);
+                    cmd.Parameters.AddWithValue("@UserName", review.UserName);
+                    cmd.Parameters.AddWithValue("@ReviewText", review.ReviewText);
+                    cmd.Parameters.AddWithValue("@Timestamp", DateTime.Now);
+
+                    cmd.ExecuteNonQuery();
+                    return "OK";
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    return ex.Message;
+                }
+            }
+        }
+
+        // get reviews by book id
+
+        public List<Review> GetBookReviews(int bookId)
+        {
+            List<Review> reviews = new List<Review>();
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                try
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM Review WHERE BookId = @BookId ORDER BY Timestamp DESC", con);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Review review = new Review
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                BookId = reader.GetInt32(reader.GetOrdinal("BookId")),
+                                UserId = reader.GetString(reader.GetOrdinal("UserId")),
+                                UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                                ReviewText = reader.GetString(reader.GetOrdinal("ReviewText")),
+                                Timestamp = reader.GetDateTime(reader.GetOrdinal("Timestamp"))
+                            };
+                            reviews.Add(review);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+            return reviews;
         }
 
 
@@ -233,7 +298,7 @@ namespace eBookSystem.Models
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Carts (UserId) VALUES (@UserId)", con);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Cart (UserId) VALUES (@UserId)", con);
                 cmd.Parameters.AddWithValue("@UserId", userId);
                 cmd.ExecuteNonQuery();
             }
@@ -300,78 +365,78 @@ namespace eBookSystem.Models
             }
         }
         public void AddFeedback(int orderId, int bookId, int rating)
-    {
-        using (SqlConnection con = new SqlConnection(_connectionString))
         {
-            try
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Feedbacks (OrderId, BookId, Rating) VALUES (@OrderId, @BookId, @Rating)", con);
-                cmd.Parameters.AddWithValue("@OrderId", orderId);
-                cmd.Parameters.AddWithValue("@BookId", bookId);
-                cmd.Parameters.AddWithValue("@Rating", rating);
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred while adding feedback: " + ex.Message);
-                throw;
-            }
-        }
-    }
-
-    public List<Feedback> GetFeedbacksByBookId(int bookId)
-    {
-        List<Feedback> feedbacks = new List<Feedback>();
-
-        using (SqlConnection con = new SqlConnection(_connectionString))
-        {
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Feedbacks WHERE BookId = @BookId", con);
-                cmd.Parameters.AddWithValue("@BookId", bookId);
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                try
                 {
-                    feedbacks.Add(new Feedback
-                    {
-                        Id = reader.GetInt32(0),
-                        BookId = reader.GetInt32(1),
-                        Rating = reader.GetInt32(2)
-                    });
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Feedbacks (OrderId, BookId, Rating) VALUES (@OrderId, @BookId, @Rating)", con);
+                    cmd.Parameters.AddWithValue("@OrderId", orderId);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
+                    cmd.Parameters.AddWithValue("@Rating", rating);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred while adding feedback: " + ex.Message);
+                    throw;
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred while getting feedbacks: " + ex.Message);
-                throw;
-            }
         }
 
-        return feedbacks;
-    }
-
-    public void UpdateBookAverageRating(int bookId, double? averageRating)
-    {
-        using (SqlConnection con = new SqlConnection(_connectionString))
+        public List<Feedback> GetFeedbacksByBookId(int bookId)
         {
-            try
+            List<Feedback> feedbacks = new List<Feedback>();
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE Books SET AverageRating = @AverageRating WHERE Id = @BookId", con);
-                cmd.Parameters.AddWithValue("@AverageRating", (object)averageRating ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@BookId", bookId);
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM Feedbacks WHERE BookId = @BookId", con);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        feedbacks.Add(new Feedback
+                        {
+                            Id = reader.GetInt32(0),
+                            BookId = reader.GetInt32(1),
+                            Rating = reader.GetInt32(2)
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred while getting feedbacks: " + ex.Message);
+                    throw;
+                }
             }
-            catch (Exception ex)
+
+            return feedbacks;
+        }
+
+        public void UpdateBookAverageRating(int bookId, double? averageRating)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                Console.WriteLine("An error occurred while updating the book's average rating: " + ex.Message);
-                throw;
+                try
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("UPDATE Books SET AverageRating = @AverageRating WHERE Id = @BookId", con);
+                    cmd.Parameters.AddWithValue("@AverageRating", (object)averageRating ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred while updating the book's average rating: " + ex.Message);
+                    throw;
+                }
             }
         }
-    }
         private void UpdateBookAverageRating(int bookId)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -403,7 +468,7 @@ namespace eBookSystem.Models
                 try
                 {
                     con.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM Carts WHERE UserId = @UserId", con);
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM Cart WHERE UserId = @UserId", con);
                     cmd.Parameters.AddWithValue("@UserId", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
@@ -1217,8 +1282,8 @@ namespace eBookSystem.Models
                 }
             }
         }
-            // Method to get low stock alert report
-            public List<LowStockAlertReport> GetLowStockAlertReport()
+        // Method to get low stock alert report
+        public List<LowStockAlertReport> GetLowStockAlertReport()
         {
             List<LowStockAlertReport> reports = new List<LowStockAlertReport>();
 
@@ -1273,7 +1338,7 @@ namespace eBookSystem.Models
             }
         }
 
- 
+
         public void UpdateBookQuantity(int bookId, int quantityChange)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -1294,10 +1359,10 @@ namespace eBookSystem.Models
             }
         }
 
-      
-       
 
-    public byte[] GetImageBytes(string url)
+
+
+        public byte[] GetImageBytes(string url)
         {
             using (var webClient = new System.Net.WebClient())
             {

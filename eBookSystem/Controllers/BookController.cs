@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using eBookSystem.Models;
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eBookSystem.Controllers
 {
@@ -188,7 +190,39 @@ namespace eBookSystem.Controllers
             {
                 return NotFound();
             }
+
+            // Get reviews for this book
+            book.Reviews = _database.GetBookReviews(id);
+
             return View(book);
         }
+
+        // Review controllers
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddReview(Review review)
+        {
+            try
+            {
+                // Get the current user's ID
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                review.UserName = User.Identity.Name;
+
+                review.UserId = userId;
+
+                string res = _database.InsertReview(review);
+                TempData["msg"] = res == "OK" ? "Review added successfully!" : $"Error: {res}";
+            }
+            catch (Exception ex)
+            {
+                TempData["msg"] = ex.Message;
+                throw;
+            }
+
+            return RedirectToAction(nameof(Details), new { id = review.BookId });
+        }
+
+
     }
 }
